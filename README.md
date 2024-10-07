@@ -33,4 +33,4 @@ yarn test
 ```
 
 ## Testing out the new workflow
-hello test
+hello
