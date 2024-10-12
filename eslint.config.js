@@ -1,16 +1,17 @@
-import { eslintRecommended } from "@eslint/js"; // Standard import for ESLint v9
+import pkg from "@eslint/js"; // Import the entire package as a default export
+const { eslintRecommended } = pkg; // Extract the eslintRecommended property
 
 export default [
-  eslintRecommended,  // Apply ESLint recommended rules
+  eslintRecommended, // Apply ESLint recommended rules
   {
-    files: ["**/*.js"],  // Targets all JS files
+    files: ["**/*.js"], // Targets all JS files
     languageOptions: {
-      ecmaVersion: 2021,  // Use ECMAScript 2021
-      sourceType: "module",  // Enable ES module syntax
+      ecmaVersion: 2021, // Use ECMAScript 2021
+      sourceType: "module", // Enable ES module syntax
       globals: {
-        es6: true,  // Enable ES6 environment
-        node: true,  // Enable Node.js environment
-        mocha: true,  // Enable Mocha for testing
+        es6: true, // Enable ES6 environment
+        node: true, // Enable Node.js environment
+        mocha: true, // Enable Mocha for testing
       },
     },
     rules: {
