@@ -1,7 +1,6 @@
 version: 2
 updates:
   - package-ecosystem: "github-actions"  # Specify the ecosystem for GitHub Actions
-    versioning-strategy: "increase"      # Choose how to update (e.g., "increase" or "lockfile-only")
     directory: "/"                        # Location of the workflow files
     schedule:
       interval: "weekly"                  # Set to check for updates weekly
