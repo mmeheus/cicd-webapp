@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository code
-        uses: actions/checkout@v4  # Downgrade from v3 to v2
+        uses: actions/checkout@v4 
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
@@ -20,6 +20,9 @@ jobs:
 
       - name: Run linting
         run: yarn lint
+
+      - name: Run tests
+        run: yarn test
 
       # Step to Log in to Docker Hub
       - name: Log in to Docker Hub
