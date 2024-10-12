@@ -1,4 +1,5 @@
-import { eslintRecommended } from "@eslint/js"; // Import ESLint's recommended config
+import pkg from '@eslint/js';
+const { eslintRecommended } = pkg;
 
 export default [
   eslintRecommended,  // Apply ESLint recommended rules
