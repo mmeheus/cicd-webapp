@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+  webapp:
+    image: mmeheus/webapp  # Use the image from Docker Hub
+    ports:
+      - "3000:3000"  # Exposes the web app on port 3000
+    container_name: webapp-container
+    environment:
+      - MYSQL_URL=mysql://webapp_user:webapp_password@database/animals
+    depends_on:
+      database:
+        condition: service_healthy  # Wait for the database to be healthy
+    restart: always  # Automatically restarts the container if it stops
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/animals"]  # Check if the API is responding
+      interval: 5s
+      retries: 10
+      start_period: 5s
+      timeout: 5s
+      
+  database:
+    image: mysql:8.0  # Official MySQL 8.0 image
+    container_name: mysql-database
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password  # Root password for MySQL
+      MYSQL_DATABASE: animals  # The database that the app will use
+      MYSQL_USER: webapp_user  # User created for the web app
+      MYSQL_PASSWORD: webapp_password  # Password for the web app user
+    volumes:
+      - db_data:/var/lib/mysql  # Persist MySQL data on the host system
+    ports:
+      - "3306:3306"  # Exposes MySQL (optional, remove if you don't need external access)
+    restart: always  # Automatically restarts the container if it stops
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 7s
+      retries: 10
+      start_period: 5s
+      timeout: 5s
+  test:
+    build: .  # Use the webapp Dockerfile to build the image for the tests
+    container_name: test-container
+    environment:
+      - API_URL=http://webapp:3000  # URL of the web app service
+    depends_on:
+      webapp:
+        condition: service_healthy  # Wait for the API to be healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://webapp:3000/animals"]  # Check if the API is up
+      interval: 5s
+      retries: 5
+      start_period: 5s
+      timeout: 5s
+    command: yarn test  # Override the default command with 'yarn test'
+
+volumes:
+  db_data:
