@@ -1,7 +1,4 @@
-import { eslintRecommended } from "@eslint/js"; // Import the ESLint recommended configuration
-
 export default [
-  eslintRecommended,  // Spread the recommended configuration here
   {
     files: ["**/*.js"],  // Applies the config to all JS files
     languageOptions: {
@@ -12,6 +9,10 @@ export default [
         node: true,  // Node.js environment
         mocha: true, // Mocha environment for testing
       },
+    },
+    linterOptions: {
+      // Extends eslint recommended rules
+      extends: ["eslint:recommended"],
     },
     rules: {
       // Copying rules directly from your .eslintrc.json
