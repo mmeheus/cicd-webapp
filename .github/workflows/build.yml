@@ -39,6 +39,14 @@ jobs:
           tags: mmeheus/webapp:latest 
           push: true                     # Push the image to Docker Hub
 
-      #Run tests    
+      - name: Build Docker images
+        run: docker-compose build  # Build Docker images
+  
+      - name: Start services
+        run: docker-compose up -d  # Start services in detached mode
+  
       - name: Run tests
-        run: yarn test
+        run: docker-compose exec <service_name> yarn test  # Replace <service_name> with the name of your service in docker-compose.yml
+  
+      - name: Stop services
+        run: docker-compose down  # Stop and remove the services
