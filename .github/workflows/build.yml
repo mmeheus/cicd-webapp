@@ -35,3 +35,11 @@ jobs:
           file: ./dockerfile             # Path to your Dockerfile
           tags: mmeheus/webapp:latest 
           push: true                     # Push the image to Docker Hub
+
+      - name: Check for vulnerabilities with Snyk
+        uses: snyk/actions/node@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+            
+      - name: Snyk test
+        run: snyk test
