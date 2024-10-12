@@ -21,4 +21,11 @@
   
         - name: Run linting
           run: yarn lint
-  
+        # New Step to Build Docker Image
+        - name: Build Docker image
+          uses: docker/build-push-action@v3
+          with:
+            context: .               # Use the root directory as the context
+            file: ./Dockerfile       # Path to your Dockerfile
+            tags: your-docker-hub-username/webapp:latest # Replace with your Docker Hub username
+            push: false              # Do not push the image to Docker Hub
