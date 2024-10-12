@@ -33,6 +33,6 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: .                     # Use the root directory as the context
-          file: ./Dockerfile             # Path to your Dockerfile
-          tags: your-docker-hub-username/webapp:latest # Replace with your Docker Hub username
+          file: ./dockerfile             # Path to your Dockerfile
+          tags: mmeheus/webapp:latest 
           push: true                     # Push the image to Docker Hub
