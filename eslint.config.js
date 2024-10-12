@@ -2,8 +2,8 @@ import pkg from "@eslint/js"; // Import the entire package as a default export
 const { eslintRecommended } = pkg; // Extract the eslintRecommended property
 
 export default [
-  eslintRecommended, // Apply ESLint recommended rules
   {
+    ...eslintRecommended, // Spread the recommended configuration
     files: ["**/*.js"], // Targets all JS files
     languageOptions: {
       ecmaVersion: 2021, // Use ECMAScript 2021
