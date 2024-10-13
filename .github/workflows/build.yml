@@ -43,7 +43,7 @@ jobs:
 
       # Use Docker Compose Action to manage Docker services
       - name: Set up Docker Compose
-        uses: docker/compose-action@v3
+        uses: docker/compose-action@v2  # Correctly reference Docker Compose action
         with:
           compose-file: ./docker-compose.yml  # Path to your Docker Compose file
 
@@ -65,7 +65,7 @@ jobs:
 
       # Tear down Docker Compose services
       - name: Tear down Docker Compose services
-        uses: docker/compose-action@v3
+        uses: docker/compose-action@v2  # Correct reference for teardown
         with:
           compose-file: ./docker-compose.yml
           down: true  # Stop and remove the services
