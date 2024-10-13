@@ -45,7 +45,7 @@ jobs:
       - name: Run docker-compose
         uses: hoverkraft-tech/compose-action@v2.0.1
         with:
-          compose-file: "./docker/docker-compose.yml"
+          compose-file: "./docker-compose.yml"
 
       # Optional: Wait for services to be ready (use sleep or other health checks as needed)
       - name: Wait for services to be ready
