@@ -9,9 +9,16 @@ services:
     environment:
       - MYSQL_URL=mysql://webapp_user:webapp_password@database/animals
     depends_on:
-      - database  # Ensures that the MySQL database starts before the web app
+      database:  # Ensures that the MySQL database starts before the web app
+        condition: service_healthy  # Wait for the database to be healthy
     restart: always  # Automatically restarts the container if it stops
-
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/animals"]  # Check if the API is responding
+      interval: 5s
+      retries: 10
+      start_period: 5s
+      timeout: 5s
+      
   database:
     image: mysql:8.0  # Official MySQL 8.0 image
     container_name: mysql-database
@@ -23,15 +30,29 @@ services:
     ports:
       - "3306:3306"  # Exposes MySQL (optional, remove if you don't need external access)
     restart: always  # Automatically restarts the container if it stops
-
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]  # Check if MySQL is responding
+      interval: 7s
+      retries: 10
+      start_period: 5s
+      timeout: 5s
+      
   test:
     build: .  # Use the webapp Dockerfile to build the image for the tests
     container_name: test-container
     environment:
       - API_URL=http://webapp:3000  # URL of the web app service
     depends_on:
-      - webapp
-      - database  # Ensure webapp and database are started before running tests
+      webapp:
+        condition: service_healthy  # Wait for the API to be healthy
+      database:
+        condition: service_healthy  # Ensure database is healthy before running tests
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://webapp:3000/animals"]  # Check if the API is up
+      interval: 5s
+      retries: 5
+      start_period: 5s
+      timeout: 5s
     command: yarn test  # Override the default command with 'yarn test'
 
 # No external volumes
