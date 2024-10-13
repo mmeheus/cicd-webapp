@@ -14,10 +14,10 @@ services:
     restart: always  # Automatically restarts the container if it stops
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:3000/animals"]  # Check if the API is responding
-      interval: 5s
-      retries: 10
-      start_period: 5s
-      timeout: 5s
+      interval: 10s
+      retries: 20
+      start_period: 10s
+      timeout: 20s
       
   database:
     image: mysql:8.0  # Official MySQL 8.0 image
