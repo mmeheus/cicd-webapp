@@ -15,9 +15,9 @@ services:
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:3000/animals"]  # Check if the API is responding
       interval: 10s
-      retries: 20
+      retries: 50
       start_period: 10s
-      timeout: 20s
+      timeout: 120s
       
   database:
     image: mysql:8.0  # Official MySQL 8.0 image
