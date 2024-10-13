@@ -42,10 +42,10 @@ jobs:
           push: true                     # Push the image to Docker Hub
 
       # Use Docker Compose Action to manage Docker services
-      - name: Set up Docker Compose
-        uses: docker/compose-action@v2  # Correctly reference Docker Compose action
+      - name: Run docker-compose
+        uses: hoverkraft-tech/compose-action@v2.0.1
         with:
-          compose-file: ./docker-compose.yml  # Path to your Docker Compose file
+          compose-file: "./docker/docker-compose.yml"
 
       # Optional: Wait for services to be ready (use sleep or other health checks as needed)
       - name: Wait for services to be ready
@@ -62,10 +62,3 @@ jobs:
 
       - name: Snyk test
         run: snyk test
-
-      # Tear down Docker Compose services
-      - name: Tear down Docker Compose services
-        uses: docker/compose-action@v2  # Correct reference for teardown
-        with:
-          compose-file: ./docker-compose.yml
-          down: true  # Stop and remove the services
