@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository code
-        uses: actions/checkout@v4 
+        uses: actions/checkout@v4
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
@@ -18,13 +18,13 @@ jobs:
       - name: Install dependencies
         run: yarn install
 
-      - name: Run linting test if actions update
+      - name: Run linting
         run: yarn lint
 
       - name: Set up Docker Buildx (includes Docker Compose)
         uses: docker/setup-buildx-action@v2
         with:
-          install: true  # Install Docker Compose
+          install: true  # Ensure Docker Buildx and Docker Compose are installed
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
@@ -32,7 +32,7 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      # Step to Build and Push Docker Image
+      # Build and push Docker image
       - name: Build and push Docker image
         uses: docker/build-push-action@v3
         with:
@@ -41,17 +41,17 @@ jobs:
           tags: mmeheus/webapp:latest 
           push: true                     # Push the image to Docker Hub
 
-      # Step to run Docker Compose (build and start containers)
-      - name: Start Docker Compose services
-        run: docker-compose up -d  # Start the containers in detached mode
+      # Use Docker Compose Action to manage Docker services
+      - name: Set up Docker Compose
+        uses: docker/compose-action@v3
+        with:
+          compose-file: ./docker-compose.yml  # Path to your Docker Compose file
 
-      # Wait for services to become healthy
-      - name: Wait for containers to be healthy
-        run: |
-          docker-compose ps
-          sleep 30  # Wait time to ensure containers are healthy (adjust as needed)
+      # Optional: Wait for services to be ready (use sleep or other health checks as needed)
+      - name: Wait for services to be ready
+        run: sleep 30  # Adjust wait time if necessary
 
-      # Step to run the tests using `yarn test` after containers are running
+      # Run tests using `yarn test` after containers are up
       - name: Run tests
         run: yarn test
 
@@ -59,10 +59,13 @@ jobs:
         uses: snyk/actions/node@master
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-            
+
       - name: Snyk test
         run: snyk test
 
-      # Tear down the Docker Compose services
+      # Tear down Docker Compose services
       - name: Tear down Docker Compose services
-        run: docker-compose down
+        uses: docker/compose-action@v3
+        with:
+          compose-file: ./docker-compose.yml
+          down: true  # Stop and remove the services
