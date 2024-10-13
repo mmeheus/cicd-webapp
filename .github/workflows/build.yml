@@ -18,7 +18,7 @@ jobs:
       - name: Install dependencies
         run: yarn install
 
-      - name: Run linting
+      - name: Run linting test if actions update
         run: yarn lint
 
       - name: Set up Docker Buildx (includes Docker Compose)
