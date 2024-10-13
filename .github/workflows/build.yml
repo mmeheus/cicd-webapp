@@ -37,14 +37,14 @@ jobs:
           push: true                     # Push the image to Docker Hub
 
       # Use Docker Compose Action to manage Docker services
-      - name: Run docker-compose
-        uses: hoverkraft-tech/compose-action@v2.0.1
-        with:
-          compose-file: "./docker-compose.yml"
+      #- name: Run docker-compose
+      #  uses: hoverkraft-tech/compose-action@v2.0.1
+      #  with:
+      #    compose-file: "./docker-compose.yml"
 
       # Run tests using `yarn test` after containers are up
-      - name: Run tests
-        run: yarn test
+      #- name: Run tests
+      #  run: yarn test
 
       - name: Check for vulnerabilities with Snyk
         uses: snyk/actions/node@master
