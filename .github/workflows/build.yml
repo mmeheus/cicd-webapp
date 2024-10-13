@@ -1,4 +1,4 @@
-name: Build and test
+name: Build, run, and test
 on:
   push:
     branches:
@@ -27,7 +27,7 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      #Step to Build and Push Docker Image
+      # Step to Build and Push Docker Image
       - name: Build and push Docker image
         uses: docker/build-push-action@v3
         with:
@@ -36,6 +36,20 @@ jobs:
           tags: mmeheus/webapp:latest 
           push: true                     # Push the image to Docker Hub
 
+      # Step to run Docker Compose (build and start containers)
+      - name: Start Docker Compose services
+        run: docker-compose up -d  # Start the containers in detached mode
+
+      # Wait for services to become healthy
+      - name: Wait for containers to be healthy
+        run: |
+          docker-compose ps
+          sleep 30  # Wait time to ensure containers are healthy (adjust as needed)
+
+      # Step to run the tests using `yarn test` after containers are running
+      - name: Run tests
+        run: yarn test
+
       - name: Check for vulnerabilities with Snyk
         uses: snyk/actions/node@master
         env:
@@ -43,3 +57,7 @@ jobs:
             
       - name: Snyk test
         run: snyk test
+
+      # Tear down the Docker Compose services
+      - name: Tear down Docker Compose services
+        run: docker-compose down
